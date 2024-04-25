@@ -1,45 +1,81 @@
 version: '3.8'
 
 services:
-  masternode:
+  servernode0:
     build:
-      context: ./Master
+      context: ./p2l
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "8000:5000"
     stdin_open: true
     tty: true
     networks:
-      - Proj1-distributed-network
+      - Semester-Project-distributed-network
+    environment:
+      - NODE_ID=node0
+      - RESOURCE_ID=resource1
+      - INITIAL_VALUE=10
 
   servernode1:
     build:
-      context: ./Server
+      context: ./p2l
       dockerfile: Dockerfile
+    ports:
+      - "8001:5000"
+    stdin_open: true
+    tty: true
     networks:
-      - Proj1-distributed-network
+      - Semester-Project-distributed-network
+    environment:
+      - NODE_ID=node1
+      - RESOURCE_ID=resource1
+      - INITIAL_VALUE=20
 
   servernode2:
     build:
-      context: ./Server
+      context: ./p2l
       dockerfile: Dockerfile
+    ports:
+      - "8002:5000"
+    stdin_open: true
+    tty: true
     networks:
-      - Proj1-distributed-network
+      - Semester-Project-distributed-network
+    environment:
+      - NODE_ID=node2
+      - RESOURCE_ID=resource2
+      - INITIAL_VALUE=40
 
   servernode3:
     build:
-      context: ./Server
+      context: ./p2l
       dockerfile: Dockerfile
+    ports:
+      - "8003:5000"
+    stdin_open: true
+    tty: true
     networks:
-      - Proj1-distributed-network
+      - Semester-Project-distributed-network
+    environment:
+      - NODE_ID=node3
+      - RESOURCE_ID=resource1
+      - INITIAL_VALUE=30
 
   servernode4:
     build:
-      context: ./Server
+      context: ./p2l
       dockerfile: Dockerfile
+    ports:
+      - "8004:5000"
+    stdin_open: true
+    tty: true
     networks:
-      - Proj1-distributed-network
+      - Semester-Project-distributed-network
+    environment:
+      - NODE_ID=node4
+      - RESOURCE_ID=resource2
+      - INITIAL_VALUE=100
 
 networks:
-  Proj1-distributed-network:
+  Semester-Project-distributed-network:
     driver: bridge
