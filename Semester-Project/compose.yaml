@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  masternode:
+    build:
+      context: ./Master
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    stdin_open: true
+    tty: true
+    networks:
+      - Proj1-distributed-network
+
+  servernode1:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    networks:
+      - Proj1-distributed-network
+
+  servernode2:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    networks:
+      - Proj1-distributed-network
+
+  servernode3:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    networks:
+      - Proj1-distributed-network
+
+  servernode4:
+    build:
+      context: ./Server
+      dockerfile: Dockerfile
+    networks:
+      - Proj1-distributed-network
+
+networks:
+  Proj1-distributed-network:
+    driver: bridge

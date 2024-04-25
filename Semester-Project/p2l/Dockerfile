@@ -1,0 +1,10 @@
+FROM python:3.11.6
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /Semester-Project
+
+COPY p2l.py .
+
+CMD ["python", "p2l.py"]
