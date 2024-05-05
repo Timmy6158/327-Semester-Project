@@ -1,0 +1,3 @@
+Flask==3.0.3
+Requests==2.25.1
+supabase_py==0.0.2

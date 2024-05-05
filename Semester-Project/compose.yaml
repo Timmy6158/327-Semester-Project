@@ -1,81 +1,60 @@
 version: '3.8'
 
 services:
-  servernode0:
+  resourcenode:
     build:
       context: ./p2l
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.resourcenode
     ports:
-      - "8000:5000"
-    stdin_open: true
-    tty: true
+      - "5000:5000"
     networks:
-      - Semester-Project-distributed-network
-    environment:
-      - NODE_ID=node0
-      - RESOURCE_ID=resource1
-      - INITIAL_VALUE=10
+      - Semester-Project-distributed-network-2
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://172.21.0.2:5000/health"]
+      interval: 10s
+      retries: 5
+      timeout: 5s
 
   servernode1:
     build:
       context: ./p2l
-      dockerfile: Dockerfile
-    ports:
-      - "8001:5000"
-    stdin_open: true
-    tty: true
+      dockerfile: Dockerfile.servernode
+    depends_on:
+      resourcenode:
+          condition: service_healthy
     networks:
-      - Semester-Project-distributed-network
-    environment:
-      - NODE_ID=node1
-      - RESOURCE_ID=resource1
-      - INITIAL_VALUE=20
+      - Semester-Project-distributed-network-2
 
   servernode2:
     build:
       context: ./p2l
-      dockerfile: Dockerfile
-    ports:
-      - "8002:5000"
-    stdin_open: true
-    tty: true
+      dockerfile: Dockerfile.servernode
+    depends_on:
+      resourcenode:
+          condition: service_healthy
     networks:
-      - Semester-Project-distributed-network
-    environment:
-      - NODE_ID=node2
-      - RESOURCE_ID=resource2
-      - INITIAL_VALUE=40
+      - Semester-Project-distributed-network-2
 
   servernode3:
     build:
       context: ./p2l
-      dockerfile: Dockerfile
-    ports:
-      - "8003:5000"
-    stdin_open: true
-    tty: true
+      dockerfile: Dockerfile.servernode
+    depends_on:
+      resourcenode:
+          condition: service_healthy
     networks:
-      - Semester-Project-distributed-network
-    environment:
-      - NODE_ID=node3
-      - RESOURCE_ID=resource1
-      - INITIAL_VALUE=30
+      - Semester-Project-distributed-network-2
 
   servernode4:
     build:
       context: ./p2l
-      dockerfile: Dockerfile
-    ports:
-      - "8004:5000"
-    stdin_open: true
-    tty: true
+      dockerfile: Dockerfile.servernode
+    depends_on:
+      resourcenode:
+          condition: service_healthy
     networks:
-      - Semester-Project-distributed-network
-    environment:
-      - NODE_ID=node4
-      - RESOURCE_ID=resource2
-      - INITIAL_VALUE=100
+      - Semester-Project-distributed-network-2
 
 networks:
-  Semester-Project-distributed-network:
+  Semester-Project-distributed-network-2:
     driver: bridge

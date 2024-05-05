@@ -1,0 +1,10 @@
+FROM python:3.9
+
+WORKDIR /app
+
+COPY servernode.py .
+COPY requirements.txt ./requirements.txt
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+CMD ["python", "servernode.py"]
