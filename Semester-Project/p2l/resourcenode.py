@@ -1,7 +1,9 @@
 from flask import Flask, request, jsonify
 from supabase_py import create_client
 import threading
+import random
 import logging
+import flask_cors
 
 SUPABASE_URL = "https://quzaibbwuujchjszcnux.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF1emFpYmJ3dXVqY2hqc3pjbnV4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTQ2MjMxMzksImV4cCI6MjAzMDE5OTEzOX0.d-DG9rkEehljOGGwfhJRtzVKWRgvfBOxIxhbNx0D5sA"
@@ -10,6 +12,7 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 app = Flask(__name__)
 lock = threading.Lock()
+flask_cors.CORS(app)
 
 # Configure logging
 logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
@@ -42,11 +45,25 @@ def health_check():
 
 @app.route('/tasks', methods=['GET'])
 def get_tasks():
+    """Endpoint to retrieve tasks"""
+    lock_manager.acquire('tasks')  # Acquire lock on 'tasks' data item
+    
+    # Check if the request wants to fetch a random task
+    tasks = supabase.table('tasks').select('*').execute()['data']
+    random_task = random.choice(tasks)
+    lock_manager.release('tasks')  # Release lock on 'tasks' data item
+    return jsonify(random_task), 200
+
+@app.route('/alltasks', methods=['GET'])
+def get_alltasks():
     """Endpoint to retrieve all tasks"""
     lock_manager.acquire('tasks')  # Acquire lock on 'tasks' data item
-    tasks = supabase.table('tasks').select('*').execute()
+    
+    # Retrieve all tasks from the database
+    tasks = supabase.table('tasks').select('*').execute()['data']
+    
     lock_manager.release('tasks')  # Release lock on 'tasks' data item
-    return jsonify(tasks['data']), 200
+    return jsonify(tasks), 200
 
 @app.route('/tasks', methods=['POST'])
 def create_task():

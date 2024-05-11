@@ -10,7 +10,7 @@ services:
     networks:
       - Semester-Project-distributed-network-2
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://172.21.0.2:5000/health"]
+      test: ["CMD", "curl", "-f", "http://resourcenode:5000/health"]
       interval: 10s
       retries: 5
       timeout: 5s
@@ -21,7 +21,7 @@ services:
       dockerfile: Dockerfile.servernode
     depends_on:
       resourcenode:
-          condition: service_healthy
+        condition: service_healthy
     networks:
       - Semester-Project-distributed-network-2
 
@@ -31,7 +31,7 @@ services:
       dockerfile: Dockerfile.servernode
     depends_on:
       resourcenode:
-          condition: service_healthy
+        condition: service_healthy
     networks:
       - Semester-Project-distributed-network-2
 
@@ -41,7 +41,7 @@ services:
       dockerfile: Dockerfile.servernode
     depends_on:
       resourcenode:
-          condition: service_healthy
+        condition: service_healthy
     networks:
       - Semester-Project-distributed-network-2
 
@@ -51,7 +51,14 @@ services:
       dockerfile: Dockerfile.servernode
     depends_on:
       resourcenode:
-          condition: service_healthy
+        condition: service_healthy
+    networks:
+      - Semester-Project-distributed-network-2
+
+  frontend:
+    build: ./p2l/frontEnd
+    ports:
+      - "8080:80"  # Map port 80 of the frontend container to port 5000 of the host
     networks:
       - Semester-Project-distributed-network-2
 

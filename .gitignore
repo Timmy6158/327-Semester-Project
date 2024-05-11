@@ -1,5 +1,15 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,venv
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,venv
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
+.DS_Store
+.vscode/
+.idea/
+*.iml
+
 
 ### venv ###
 # Virtualenv

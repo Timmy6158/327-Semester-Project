@@ -70,6 +70,7 @@
         <h1>Task Scheduler</h1>
         <form id="taskForm">
             <input type="text" id="taskInput" placeholder="Enter task name">
+            <input type="text" id="descriptionInput" placeholder="Enter task description">
             <button type="submit">Schedule Task</button>
         </form>
         <ul id="taskList"></ul>
@@ -78,39 +79,40 @@
     <script>
         const taskForm = document.getElementById('taskForm');
         const taskInput = document.getElementById('taskInput');
+        const descriptionInput = document.getElementById('descriptionInput');
         const taskList = document.getElementById('taskList');
 
-        // Function to fetch tasks from the server and display them
         function fetchTasks() {
-            fetch('/tasks')
+            fetch('http://127.0.0.1:5000/alltasks')
                 .then(response => response.json())
                 .then(tasks => {
                     taskList.innerHTML = '';
                     tasks.forEach(task => {
                         const li = document.createElement('li');
-                        li.textContent = task.name;
+                        li.textContent = task.name + " description: " + task.description;
                         taskList.appendChild(li);
                     });
                 })
                 .catch(error => console.error('Error fetching tasks:', error));
         }
 
-        // Function to handle form submission
         function handleSubmit(event) {
             event.preventDefault();
             const taskName = taskInput.value.trim();
-            if (taskName) {
-                fetch('/tasks', {
+            const taskDescription = descriptionInput.value.trim();
+            if (taskName && taskDescription) {
+                fetch('http://127.0.0.1:5000/tasks', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ task: { name: taskName } })
+                    body: JSON.stringify({'task': { 'name': taskName, 'description': taskDescription }})
                 })
                 .then(response => {
                     if (response.ok) {
                         fetchTasks();
                         taskInput.value = '';
+                        descriptionInput.value = '';
                     } else {
                         console.error('Error scheduling task:', response.statusText);
                     }
@@ -119,10 +121,8 @@
             }
         }
 
-        // Event listener for form submission
         taskForm.addEventListener('submit', handleSubmit);
 
-        // Initial fetch of tasks when the page loads
         fetchTasks();
     </script>
 </body>
