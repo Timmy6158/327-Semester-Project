@@ -8,7 +8,7 @@ import socket
 RESOURCE_NODE_HOST = "resourcenode"
 RESOURCE_NODE_PORT = 5000
 RESOURCE_NODE_ENDPOINT = "tasks"
-NUM_REQUESTS = 1
+NUM_REQUESTS = 20
 
 # List to store response times
 response_times = []
